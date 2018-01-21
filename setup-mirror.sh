@@ -1,0 +1,36 @@
+sudo wget http://node-arm.herokuapp.com/node_latest_armhf.deb
+sudo dpkg -i node_latest_armhf.deb
+sudo apt-get install npm
+sudo apt-get install git
+cd /home/pi/
+git clone https://github.com/MichMich/MagicMirror
+cd MagicMirror
+sudo npm install #This will take a LONG time, expect 30 minutes
+
+sudo apt-get install unclutter
+sudo aptitude install xinit
+sudo apt-get install matchbox
+sudo raspi-config #-> Boot Options -> B1 Desktop/CLI -> B2 Console Autologin
+
+sudo cat >> /home/pi/start.sh << EOF
+#! /bin/bash
+cd ~/MagicMirror
+node serveronly &
+sleep 45
+sudo xinit /home/pi/startDisplay.sh
+EOF
+
+sudo chmod a+x /home/pi/start.sh
+sudo mv /home/pi/start.sh /etc/init.d/startMagicMirror.sh
+sudo update-rc.d startMagicMirror.sh defaults 100
+sudo apt-get install x11-xserver-utils
+
+sudo cat >> /home/pi/startDisplay.sh << EOF
+#!/bin/sh
+xset -dpms # disable DPMS (Energy Star) features.
+xset s off # disable screen saver
+xset s noblank # don’t blank the video device
+matchbox-window-manager &
+unclutter &
+chromium-browser --start-maximized --incognito --kiosk --no-default-browser-check http://localhost:8080
+EOF
