@@ -1,15 +1,15 @@
 sudo wget http://node-arm.herokuapp.com/node_latest_armhf.deb
 sudo dpkg -i node_latest_armhf.deb
-sudo apt-get install npm
-sudo apt-get install git
+sudo apt-get install -y npm
+sudo apt-get install -y git
 cd /home/pi/
 git clone https://github.com/MichMich/MagicMirror
 cd MagicMirror
 sudo npm install #This will take a LONG time, expect 30 minutes
 
-sudo apt-get install unclutter
-sudo aptitude install xinit
-sudo apt-get install matchbox
+sudo apt-get install -y unclutter
+sudo aptitude install -y xinit
+sudo apt-get install -y matchbox
 sudo raspi-config #-> Boot Options -> B1 Desktop/CLI -> B2 Console Autologin
 
 sudo cat >> /home/pi/start.sh << EOF
@@ -23,7 +23,7 @@ EOF
 sudo chmod a+x /home/pi/start.sh
 sudo mv /home/pi/start.sh /etc/init.d/startMagicMirror.sh
 sudo update-rc.d startMagicMirror.sh defaults 100
-sudo apt-get install x11-xserver-utils
+sudo apt-get install -y x11-xserver-utils
 
 sudo cat >> /home/pi/startDisplay.sh << EOF
 #!/bin/sh
